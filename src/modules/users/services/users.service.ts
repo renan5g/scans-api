@@ -46,8 +46,7 @@ export class UsersService {
   async update(id: string, input: UpdateUserInput) {
     const userAlreadyExists = await this.usersRepository.existsById(id);
 
-    if (userAlreadyExists === false)
-      throw new NotFoundException('User does not exists');
+    if (!userAlreadyExists) throw new NotFoundException('User does not exists');
 
     const user = await this.usersRepository.update(id, input);
     return user;
