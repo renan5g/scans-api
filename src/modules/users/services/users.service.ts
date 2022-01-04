@@ -3,16 +3,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CryptService } from '@modules/global';
+import { CryptoService } from '@modules/global';
 
 import { UsersRepository } from '@modules/users/repositories';
 import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
+import { MessagesHelper } from '@common/helpers';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
-    private readonly cryptService: CryptService,
+    private readonly cryptoService: CryptoService,
   ) {}
 
   async index() {
@@ -23,7 +24,9 @@ export class UsersService {
   async show(id: string) {
     const result = await this.usersRepository.getById(id);
 
-    if (!result) throw new NotFoundException('User does not exists');
+    if (!result) {
+      throw new NotFoundException(MessagesHelper.USER_NOT_FOUND);
+    }
 
     return result;
   }
@@ -31,9 +34,11 @@ export class UsersService {
   async store({ email, password, ...rest }: CreateUserInput) {
     const userAlreadyExists = await this.usersRepository.existsByEmail(email);
 
-    if (userAlreadyExists) throw new BadRequestException('User already exists');
+    if (userAlreadyExists) {
+      throw new BadRequestException(MessagesHelper.USER_ALREADY_EXISTS);
+    }
 
-    const hashedPassword = await this.cryptService.encrypt(password);
+    const hashedPassword = await this.cryptoService.encrypt(password);
 
     const user = await this.usersRepository.create({
       email,
@@ -46,7 +51,9 @@ export class UsersService {
   async update(id: string, input: UpdateUserInput) {
     const userAlreadyExists = await this.usersRepository.existsById(id);
 
-    if (!userAlreadyExists) throw new NotFoundException('User does not exists');
+    if (!userAlreadyExists) {
+      throw new NotFoundException(MessagesHelper.USER_NOT_FOUND);
+    }
 
     const user = await this.usersRepository.update(id, input);
     return user;

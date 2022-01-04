@@ -1,10 +1,14 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+
+import { GqlAuthGuard } from '@common/guards';
 
 import { User } from '@modules/users/models';
 import { UsersService } from '@modules/users/services';
 import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
 
-@Resolver('users')
+@Resolver(() => User)
+@UseGuards(GqlAuthGuard)
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
@@ -15,7 +19,7 @@ export class UsersResolver {
   }
 
   @Query(() => User)
-  async showUser(@Args('id') id: string): Promise<User> {
+  async showUser(@Args('id', new ParseUUIDPipe()) id: string): Promise<User> {
     const result = await this.usersService.show(id);
     return result;
   }
@@ -28,7 +32,7 @@ export class UsersResolver {
 
   @Mutation(() => User)
   async updateUser(
-    @Args('id') id: string,
+    @Args('id', new ParseUUIDPipe()) id: string,
     @Args('input') input: UpdateUserInput,
   ): Promise<User> {
     const result = await this.usersService.update(id, input);
@@ -36,7 +40,9 @@ export class UsersResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteUser(@Args('id') id: string): Promise<boolean> {
+  async deleteUser(
+    @Args('id', new ParseUUIDPipe()) id: string,
+  ): Promise<boolean> {
     const result = await this.usersService.delete(id);
     return result;
   }

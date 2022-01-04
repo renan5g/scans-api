@@ -3,7 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { IsString, IsNotEmpty, IsEmail, Matches } from 'class-validator';
 
 @InputType()
-export class CreateUserInput {
+export class RegisterInput {
   @IsString()
   @IsNotEmpty()
   @Matches(RegExHelper.USERNAME)
