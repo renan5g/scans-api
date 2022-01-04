@@ -1,1 +1,1 @@
-export const RexHelper = {};
+export const RexExHelper = {};
