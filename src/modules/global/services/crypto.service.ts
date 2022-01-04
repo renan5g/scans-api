@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { compare, hash, genSalt } from 'bcrypt';
 
 @Injectable()
-export class CryptService {
+export class CryptoService {
   async encrypt(value: string): Promise<string> {
     const salt = await genSalt(5);
     return hash(value, salt);

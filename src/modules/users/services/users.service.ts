@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CryptService } from '@modules/global';
+import { CryptoService } from '@modules/global';
 
 import { UsersRepository } from '@modules/users/repositories';
 import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
@@ -12,7 +12,7 @@ import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
 export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
-    private readonly cryptService: CryptService,
+    private readonly cryptoService: CryptoService,
   ) {}
 
   async index() {
@@ -33,7 +33,7 @@ export class UsersService {
 
     if (userAlreadyExists) throw new BadRequestException('User already exists');
 
-    const hashedPassword = await this.cryptService.encrypt(password);
+    const hashedPassword = await this.cryptoService.encrypt(password);
 
     const user = await this.usersRepository.create({
       email,
