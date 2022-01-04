@@ -1,5 +1,6 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsOptional, Min } from 'class-validator';
+import { InputType } from '@nestjs/graphql';
+import { IsEmail, IsNotEmpty, IsOptional, Matches, Min } from 'class-validator';
+import { RegExHelper } from '@common/helpers';
 
 @InputType()
 export class UpdateUserInput {
@@ -8,9 +9,9 @@ export class UpdateUserInput {
   @IsNotEmpty()
   email?: string;
 
-  @Min(6)
   @IsOptional()
   @IsNotEmpty()
+  @Matches(RegExHelper.USERNAME)
   username?: string;
 
   @IsOptional()
