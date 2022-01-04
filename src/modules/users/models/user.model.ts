@@ -1,5 +1,5 @@
 import { Entity } from '@common/classes';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class User extends Entity {
@@ -7,4 +7,6 @@ export class User extends Entity {
   email: string;
   username: string;
   avatar?: string;
+  @HideField()
+  password: string;
 }

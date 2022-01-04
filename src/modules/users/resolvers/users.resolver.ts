@@ -1,11 +1,14 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+
+import { GqlAuthGuard } from '@common/guards';
 
 import { User } from '@modules/users/models';
 import { UsersService } from '@modules/users/services';
 import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
-import { ParseUUIDPipe } from '@nestjs/common';
 
 @Resolver(() => User)
+@UseGuards(GqlAuthGuard)
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 

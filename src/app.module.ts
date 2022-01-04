@@ -14,6 +14,7 @@ import { GlobalModule } from '@modules/global';
     ConfigModule.forRoot(),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      context: ({ req }) => ({ req }),
     }),
     PrismaModule,
     UsersModule,
