@@ -23,7 +23,7 @@ export class UsersService {
   async show(id: string) {
     const result = await this.usersRepository.getById(id);
 
-    if (!!result) throw new NotFoundException('User already exists');
+    if (!result) throw new NotFoundException('User does not exists');
 
     return result;
   }

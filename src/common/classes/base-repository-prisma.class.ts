@@ -6,19 +6,13 @@ import {
   PrismaTables,
 } from '@common/interfaces';
 import { PrismaService } from '@modules/prisma';
-import { BaseRepository } from './base-repository.class';
 
 @Injectable()
-export abstract class BaseRepositoryPrisma<
-  T,
-  U extends PrismaTables,
-> extends BaseRepository<T> {
+export abstract class BaseRepositoryPrisma<T, U extends PrismaTables> {
   @Inject()
   protected readonly prismaService: PrismaService;
 
-  constructor(protected readonly Model: Type<T>, protected readonly table: U) {
-    super();
-  }
+  constructor(protected readonly Model: Type<T>, protected readonly table: U) {}
 
   protected async exists(where?: AllPrismaWhereInput[U]): Promise<boolean> {
     const count = await this.prismaService[this.table].count({

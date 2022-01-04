@@ -18,17 +18,18 @@ scalar DateTime
 
 type Query {
   allUsers: [User!]!
-  showUser(where: String!): User!
+  showUser(id: String!): User!
 }
 
 type Mutation {
   createUser(input: CreateUserInput!): User!
-  updateUser(input: UpdateUserInput!, where: String!): User!
+  updateUser(input: UpdateUserInput!, id: String!): User!
+  deleteUser(id: String!): Boolean!
 }
 
 input CreateUserInput {
-  email: String!
   username: String!
+  email: String!
   password: String!
   avatar: String
 }
