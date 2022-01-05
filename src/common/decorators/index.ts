@@ -1,2 +1,2 @@
 export * from './field-id.decorator';
-export * from './user.decorator';
+export * from './auth-user.decorator';
