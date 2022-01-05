@@ -22,8 +22,16 @@ type AuthPayload {
 }
 
 type Query {
-  allUsers: [User!]!
+  me: User!
+  allUsers(filter: FilterInput!): [User!]!
   showUser(id: String!): User!
+}
+
+input FilterInput {
+  search: String
+  perPage: Float
+  page: Float
+  orderBy: String
 }
 
 type Mutation {

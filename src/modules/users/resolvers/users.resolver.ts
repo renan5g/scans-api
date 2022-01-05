@@ -2,19 +2,31 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 
 import { GqlAuthGuard } from '@common/guards';
+import { AuthUser } from '@common/decorators';
+import { ContextUser } from '@common/types';
 
 import { User } from '@modules/users/models';
 import { UsersService } from '@modules/users/services';
-import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
+import {
+  CreateUserInput,
+  UpdateUserInput,
+  FilterInput,
+} from '@modules/users/dtos';
 
 @Resolver(() => User)
 @UseGuards(GqlAuthGuard)
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
+  @Query(() => User)
+  async me(@AuthUser() { userId }: ContextUser) {
+    const result = await this.usersService.show(userId);
+    return result;
+  }
+
   @Query(() => [User])
-  async allUsers(): Promise<User[]> {
-    const result = await this.usersService.index();
+  async allUsers(@Args('filter') filter?: FilterInput): Promise<User[]> {
+    const result = await this.usersService.index(filter);
     return result;
   }
 

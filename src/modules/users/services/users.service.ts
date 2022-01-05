@@ -6,7 +6,11 @@ import {
 import { CryptoService } from '@modules/global';
 
 import { UsersRepository } from '@modules/users/repositories';
-import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
+import {
+  CreateUserInput,
+  UpdateUserInput,
+  FilterInput,
+} from '@modules/users/dtos';
 import { MessagesHelper } from '@common/helpers';
 
 @Injectable()
@@ -16,8 +20,8 @@ export class UsersService {
     private readonly cryptoService: CryptoService,
   ) {}
 
-  async index() {
-    const result = await this.usersRepository.getAll();
+  async index(filter: FilterInput) {
+    const result = await this.usersRepository.getAll(filter);
     return result;
   }
 
@@ -31,7 +35,7 @@ export class UsersService {
     return result;
   }
 
-  async store({ email, password, ...rest }: CreateUserInput) {
+  async store({ email, password, username, avatar }: CreateUserInput) {
     const userAlreadyExists = await this.usersRepository.existsByEmail(email);
 
     if (userAlreadyExists) {
@@ -43,8 +47,14 @@ export class UsersService {
     const user = await this.usersRepository.create({
       email,
       password: hashedPassword,
-      ...rest,
+      username,
+      avatar,
     });
+
+    if (!user) {
+      throw new BadRequestException(MessagesHelper.USER_ALREADY_EXISTS);
+    }
+
     return user;
   }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService, Prisma } from '@modules/prisma';
-import { CreateUserInput, UpdateUserInput } from '../dtos';
+import { CreateUserInput, FilterInput, UpdateUserInput } from '../dtos';
 import { User } from '../models';
 
 @Injectable()
@@ -16,8 +16,32 @@ export class UsersRepository {
     return await this.exists({ id });
   }
 
-  async getAll(): Promise<User[] | null> {
-    const users = await this.prismaService.user.findMany();
+  async getAll({
+    orderBy,
+    page = 1,
+    perPage = 20,
+    search,
+  }: FilterInput): Promise<User[] | null> {
+    const or = search
+      ? {
+          OR: [
+            { email: { contains: search } },
+            { username: { contains: search } },
+          ],
+        }
+      : {};
+
+    const users = await this.prismaService.user.findMany({
+      where: {
+        ...or,
+      },
+      take: perPage,
+      skip: perPage * (page - 1),
+      orderBy: {
+        updatedAt: orderBy,
+      },
+    });
+
     return users;
   }
 
@@ -49,7 +73,7 @@ export class UsersRepository {
     return !!deleted;
   }
 
-  private async exists(where?: Prisma.UserWhereUniqueInput): Promise<boolean> {
+  async exists(where?: Prisma.UserWhereUniqueInput): Promise<boolean> {
     const count = await this.prismaService.user.count({
       where,
     });
