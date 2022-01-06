@@ -12,6 +12,18 @@ export class UsersRepository {
     return await this.exists({ email });
   }
 
+  async existsByEmailOrUsername(
+    email: string,
+    username: string,
+  ): Promise<boolean> {
+    const existsEmail = await this.exists({ email });
+    const existsUsername = await this.exists({ username });
+
+    if (existsEmail || existsUsername) return true;
+
+    return false;
+  }
+
   async existsById(id: string): Promise<boolean> {
     return await this.exists({ id });
   }
@@ -47,6 +59,15 @@ export class UsersRepository {
 
   async getByEmail(email: string): Promise<User | null> {
     return await this.get({ email });
+  }
+
+  async getByEmailOrUsername(input: string): Promise<User | null> {
+    const userByEmail = await this.get({ email: input });
+
+    if (userByEmail) return userByEmail;
+
+    const userByUsername = await this.get({ username: input });
+    return userByUsername;
   }
 
   async getById(id: string): Promise<User | null> {

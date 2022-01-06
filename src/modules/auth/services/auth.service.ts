@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -8,8 +9,8 @@ import { JwtService } from '@nestjs/jwt';
 import { CryptoService } from '@modules/global';
 import { MessagesHelper } from '@common/helpers';
 
-import { UsersRepository } from '@modules/users/repositories';
 import { User } from '@modules/users/models';
+import { UsersService } from '@modules/users/services';
 
 import { LoginInput, RegisterInput } from '@modules/auth/dtos';
 import { AuthPayload } from '@modules/auth/models';
@@ -17,13 +18,16 @@ import { AuthPayload } from '@modules/auth/models';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersRepository: UsersRepository,
+    private readonly usersService: UsersService,
     private readonly cryptoService: CryptoService,
     private readonly jwtService: JwtService,
   ) {}
 
-  async loginUser({ email, password }: LoginInput): Promise<AuthPayload> {
-    const user = await this.usersRepository.getByEmail(email);
+  async loginUser({
+    emailOrUsername,
+    password,
+  }: LoginInput): Promise<AuthPayload> {
+    const user = await this.usersService.showByEmailOrUsername(emailOrUsername);
 
     const validPassword = await this.cryptoService.compare(
       password,
@@ -43,16 +47,7 @@ export class AuthService {
   }
 
   async registerUser(input: RegisterInput): Promise<AuthPayload> {
-    const hashedPassword = await this.cryptoService.encrypt(input.password);
-
-    const user = await this.usersRepository.create({
-      password: hashedPassword,
-      ...input,
-    });
-
-    if (!user) {
-      throw new BadRequestException(MessagesHelper.CREATE_USER_FAILED);
-    }
+    const user = await this.usersService.store(input);
 
     const token = await this.createJwtToken(user);
 

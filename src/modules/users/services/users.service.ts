@@ -35,8 +35,21 @@ export class UsersService {
     return result;
   }
 
+  async showByEmailOrUsername(emailOrUsername: string) {
+    const result = await this.usersRepository.getByEmailOrUsername(
+      emailOrUsername,
+    );
+
+    if (!result) {
+      throw new NotFoundException(MessagesHelper.USER_NOT_FOUND);
+    }
+
+    return result;
+  }
+
   async store({ email, password, username, avatar }: CreateUserInput) {
-    const userAlreadyExists = await this.usersRepository.existsByEmail(email);
+    const userAlreadyExists =
+      await this.usersRepository.existsByEmailOrUsername(email, username);
 
     if (userAlreadyExists) {
       throw new BadRequestException(MessagesHelper.USER_ALREADY_EXISTS);
@@ -52,7 +65,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new BadRequestException(MessagesHelper.USER_ALREADY_EXISTS);
+      throw new BadRequestException(MessagesHelper.CREATE_USER_FAILED);
     }
 
     return user;
