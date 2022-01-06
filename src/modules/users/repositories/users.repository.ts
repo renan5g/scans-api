@@ -94,7 +94,7 @@ export class UsersRepository {
     return !!deleted;
   }
 
-  async exists(where?: Prisma.UserWhereUniqueInput): Promise<boolean> {
+  private async exists(where?: Prisma.UserWhereUniqueInput): Promise<boolean> {
     const count = await this.prismaService.user.count({
       where,
     });
