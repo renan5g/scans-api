@@ -6,12 +6,9 @@ import {
 import { CryptoService } from '@modules/global';
 
 import { UsersRepository } from '@modules/users/repositories';
-import {
-  CreateUserInput,
-  UpdateUserInput,
-  FilterInput,
-} from '@modules/users/dtos';
+import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
 import { MessagesHelper } from '@common/helpers';
+import { FilterInput } from '@common/types';
 
 @Injectable()
 export class UsersService {

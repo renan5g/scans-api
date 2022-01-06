@@ -7,11 +7,8 @@ import { ContextUser } from '@common/types';
 
 import { User } from '@modules/users/models';
 import { UsersService } from '@modules/users/services';
-import {
-  CreateUserInput,
-  UpdateUserInput,
-  FilterInput,
-} from '@modules/users/dtos';
+import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
+import { FilterInput } from '@common/types';
 
 @Resolver(() => User)
 @UseGuards(GqlAuthGuard)
