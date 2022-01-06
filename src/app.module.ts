@@ -8,6 +8,7 @@ import { PrismaModule } from '@modules/prisma';
 import { AuthModule } from '@modules/auth';
 import { UsersModule } from '@modules/users';
 import { GlobalModule } from '@modules/global';
+import { CategoryModule } from '@modules/category';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { GlobalModule } from '@modules/global';
     UsersModule,
     GlobalModule,
     AuthModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [],
