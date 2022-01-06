@@ -64,9 +64,9 @@ model AlternativeTitle {
 }
 
 model Category {
-  id       String              @id @default(uuid())
-  category String
-  obras    CategoriesOnObras[]
+  id    String              @id @default(uuid())
+  name  String              @unique
+  obras CategoriesOnObras[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
