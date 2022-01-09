@@ -1,2 +1,2 @@
 export * from './context.type';
-export * from './filter.input';
+export * from './obra-status.type';
