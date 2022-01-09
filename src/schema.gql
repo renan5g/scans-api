@@ -21,6 +21,30 @@ type AuthPayload {
   token: String!
 }
 
+type Obra {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  categories: [Category!]
+  cover: String
+  sinopse: String
+  demographic: String
+  format: String
+  author: [String!]
+  artist: [String!]
+  status: String!
+  alternativesTitles: [String!]
+}
+
+type Category {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  obras: [Obra!]
+}
+
 type Query {
   me: User!
   allUsers(filter: FilterInput!): [User!]!
@@ -28,10 +52,10 @@ type Query {
 }
 
 input FilterInput {
-  search: String
-  perPage: Float
-  page: Float
-  orderBy: String
+  search: String!
+  perPage: Float!
+  page: Float!
+  orderBy: String!
 }
 
 type Mutation {
@@ -40,6 +64,9 @@ type Mutation {
   deleteUser(id: String!): Boolean!
   login(input: LoginInput!): AuthPayload!
   register(input: RegisterInput!): AuthPayload!
+  createCategory(input: CreateCategoryInput!): Category!
+  updateCategory(input: UpdateCategoryInput!, id: String!): Category!
+  deleteCategory(input: String!): Boolean!
 }
 
 input CreateUserInput {
@@ -65,4 +92,12 @@ input RegisterInput {
   email: String!
   password: String!
   avatar: String
+}
+
+input CreateCategoryInput {
+  name: String!
+}
+
+input UpdateCategoryInput {
+  name: String
 }
