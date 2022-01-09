@@ -10,11 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator graphql {
+  provider   = "graphql-schema-generator"
+  createCRUD = "true"
+  output     = "./generated"
+}
+
 enum ObraStatus {
-  ATIVO
-  COMPLETO
-  CANCELADO
-  HIATO
+  ativo
+  completo
+  cancelado
+  hiato
 }
 
 model User {
@@ -31,19 +37,19 @@ model User {
 }
 
 model Obra {
-  id          String     @id @default(uuid())
-  title       String     @unique
-  cover       String?
-  sinopse     String?
-  demographic String?
-  format      String?
-  author      String?
-  artist      String?
-  status      ObraStatus @default(ATIVO)
+  id                 String     @id @default(uuid())
+  title              String     @unique
+  cover              String?
+  sinopse            String?
+  demographic        String?
+  format             String?
+  author             String[]
+  artist             String[]
+  alternativesTitles String[]
+  status             ObraStatus @default(ativo)
 
-  alternativesTitles AlternativeTitle[]
-  categories         CategoriesOnObras[]
-  chapters           ChaptersOnObras[]
+  categories Category[]
+  chapters   Chapter[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
@@ -51,22 +57,10 @@ model Obra {
   @@map("obras")
 }
 
-model AlternativeTitle {
-  id     String @id @default(uuid())
-  title  String
-  obra   Obra   @relation(fields: [obraId], references: [id])
-  obraId String
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
-
-  @@map("alternatives_titles")
-}
-
 model Category {
-  id    String              @id @default(uuid())
-  name  String              @unique
-  obras CategoriesOnObras[]
+  id    String @id @default(uuid())
+  name  String @unique
+  obras Obra[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
@@ -74,47 +68,14 @@ model Category {
   @@map("categories")
 }
 
-model Page {
-  id        String   @id @default(uuid())
-  number    Int
-  url       String
-  Chapter   Chapter? @relation(fields: [chapterId], references: [id])
-  chapterId String?
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
-
-  @@map("pages")
-}
-
 model Chapter {
-  id              String            @id @default(uuid())
-  title           String
-  number          Int
-  url             String
-  cover           String
-  pages           Page[]
-  ChaptersOnObras ChaptersOnObras[]
+  id     String   @id @default(uuid())
+  title  String
+  number Int
+  url    String
+  cover  String
+  pages  String[]
+  obras  Obra[]
 
   @@map("chapters")
-}
-
-model CategoriesOnObras {
-  obra       Obra     @relation(fields: [obraId], references: [id])
-  obraId     String
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String
-  assignedAt DateTime @default(now())
-
-  @@id([obraId, categoryId])
-}
-
-model ChaptersOnObras {
-  obra       Obra     @relation(fields: [obraId], references: [id])
-  obraId     String
-  chapter    Chapter  @relation(fields: [chapterId], references: [id])
-  chapterId  String
-  assignedAt DateTime @default(now())
-
-  @@id([obraId, chapterId])
 }
