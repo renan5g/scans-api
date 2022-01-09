@@ -1,6 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 
+import { PaginationInput } from '@common/classes';
 import { GqlAuthGuard } from '@common/guards';
 import { AuthUser } from '@common/decorators';
 import { ContextUser } from '@common/types';
@@ -8,7 +9,6 @@ import { ContextUser } from '@common/types';
 import { User } from '@modules/users/models';
 import { UsersService } from '@modules/users/services';
 import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
-import { FilterInput } from '@common/types';
 
 @Resolver(() => User)
 @UseGuards(GqlAuthGuard)
@@ -22,7 +22,7 @@ export class UsersResolver {
   }
 
   @Query(() => [User])
-  async allUsers(@Args('filter') filter?: FilterInput): Promise<User[]> {
+  async allUsers(@Args('filter') filter?: PaginationInput): Promise<User[]> {
     const result = await this.usersService.index(filter);
     return result;
   }

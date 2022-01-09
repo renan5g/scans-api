@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CryptoService } from '@modules/global';
+import { MessagesHelper } from '@common/helpers';
+import { PaginationInput } from '@common/classes';
 
 import { UsersRepository } from '@modules/users/repositories';
 import { CreateUserInput, UpdateUserInput } from '@modules/users/dtos';
-import { MessagesHelper } from '@common/helpers';
-import { FilterInput } from '@common/types';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +17,7 @@ export class UsersService {
     private readonly cryptoService: CryptoService,
   ) {}
 
-  async index(filter: FilterInput) {
+  async index(filter: PaginationInput) {
     const result = await this.usersRepository.getAll(filter);
     return result;
   }

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
+import { PaginationInput } from '@common/classes';
 import { PrismaService, Prisma } from '@modules/prisma';
 import { CreateUserInput, UpdateUserInput } from '../dtos';
 import { User } from '../models';
-import { FilterInput } from '@common/types';
 
 @Injectable()
 export class UsersRepository {
@@ -34,7 +34,7 @@ export class UsersRepository {
     page = 1,
     perPage = 20,
     search,
-  }: FilterInput): Promise<User[] | null> {
+  }: PaginationInput): Promise<User[] | null> {
     const or = search
       ? {
           OR: [
