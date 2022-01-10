@@ -1,10 +1,10 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum ObraStatus {
-  ativo,
-  completo,
-  cancelado,
-  hiato,
+  ativo = 'ativo',
+  completo = 'completo',
+  cancelado = 'cancelado',
+  hiato = 'hiato',
 }
 
 registerEnumType(ObraStatus, {
