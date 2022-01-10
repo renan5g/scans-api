@@ -1,10 +1,10 @@
-import { ObraStatus } from '@common/types';
 import { Field, InputType } from '@nestjs/graphql';
+import { ObraStatus } from '@common/types';
 
 @InputType()
-export class CreateObraInput {
+export class UpdateObraInput {
   @Field()
-  title: string;
+  title?: string;
   cover?: string;
   sinopse?: string;
   demographic?: string;

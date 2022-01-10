@@ -1,4 +1,4 @@
-import { FilterInput } from '@common/classes';
+import { PaginationInput } from '@common/classes';
 import {
   Injectable,
   NotAcceptableException,
@@ -11,7 +11,7 @@ import { CategoryRepository } from '../repositories';
 export class CategoryService {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  async index(filters?: FilterInput) {
+  async index(filters?: PaginationInput) {
     const categories = await this.categoryRepository.getAll();
     return categories;
   }

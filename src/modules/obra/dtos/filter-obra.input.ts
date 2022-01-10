@@ -1,12 +1,12 @@
 import { PaginationInput } from '@common/classes';
 import { ObraStatus } from '@common/types';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 
-@ObjectType()
+@InputType()
 export class FilterObraInput extends PaginationInput {
-  categories: string[];
-  format: string;
+  categories?: string[];
+  format?: string;
 
   @Field(() => ObraStatus)
-  status: ObraStatus;
+  status?: ObraStatus;
 }

@@ -47,11 +47,15 @@ type Category {
 
 type Query {
   me: User!
-  allUsers(filter: FilterInput!): [User!]!
+  allUsers(filter: PaginationInput!): [User!]!
   showUser(id: String!): User!
+  allCategories: [Category!]!
+  showCategory(id: String!): Category!
+  allObras(filter: PaginationInput!): [Obra!]!
+  showObra(id: String!): Obra!
 }
 
-input FilterInput {
+input PaginationInput {
   search: String!
   perPage: Float!
   page: Float!
@@ -67,6 +71,9 @@ type Mutation {
   createCategory(input: CreateCategoryInput!): Category!
   updateCategory(input: UpdateCategoryInput!, id: String!): Category!
   deleteCategory(input: String!): Boolean!
+  createObra(input: CreateObraInput!): Obra!
+  updateObra(input: UpdateObraInput!, id: String!): Obra!
+  deleteObra(input: String!): Boolean!
 }
 
 input CreateUserInput {
@@ -100,4 +107,37 @@ input CreateCategoryInput {
 
 input UpdateCategoryInput {
   name: String
+}
+
+input CreateObraInput {
+  title: String!
+  status: ObraStatus
+  cover: String
+  sinopse: String
+  demographic: String
+  format: String
+  author: [String!]
+  artist: [String!]
+  alternativesTitles: [String!]
+  categoryIds: [String!]
+}
+
+enum ObraStatus {
+  ativo
+  completo
+  cancelado
+  hiato
+}
+
+input UpdateObraInput {
+  title: String
+  status: ObraStatus
+  cover: String
+  sinopse: String
+  demographic: String
+  format: String
+  author: [String!]
+  artist: [String!]
+  alternativesTitles: [String!]
+  categoryIds: [String!]
 }

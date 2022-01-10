@@ -9,6 +9,7 @@ import { AuthModule } from '@modules/auth';
 import { UsersModule } from '@modules/users';
 import { GlobalModule } from '@modules/global';
 import { CategoryModule } from '@modules/category';
+import { ObraModule } from '@modules/obra';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CategoryModule } from '@modules/category';
     GlobalModule,
     AuthModule,
     CategoryModule,
+    ObraModule,
   ],
   controllers: [],
   providers: [],
